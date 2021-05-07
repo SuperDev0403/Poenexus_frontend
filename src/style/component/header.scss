@@ -1,0 +1,45 @@
+.top-navbar {
+    font-weight: 400;
+    background: #6e7aff;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.bottom-navbar {
+    background: #ffffff;
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-transition-duration: 3s;
+    -moz-transition-duration: 3s;
+    -o-transition-duration: 3s;
+    transition-duration: 3s;
+    -webkit-transition-property: position, left, right, top, z-index;
+    -moz-transition-property: position, left, right, top, z-index;
+    -o-transition-property: position, left, right, top, z-index;
+    transition-property: position, left, right, top, z-index;
+    box-shadow: 0 19px 34px -15px #d2d2f2;
+    -webkit-box-shadow: 0 19px 34px -15px #d2d2f2;
+    -moz-box-shadow: 0 19px 34px -15px #d2d2f2;
+}
+
+.page-navigation {
+
+    .nav-item > .nav-link {
+        color: #686868;
+        padding: 22px 10px;
+        line-height: 1;
+        font-weight: 400;
+    }
+}
+
+a.brand-logo {
+    img {
+        width: 125px;
+    }
+}
