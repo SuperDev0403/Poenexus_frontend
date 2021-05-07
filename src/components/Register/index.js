@@ -71,7 +71,7 @@ class Register extends Component {
     return (
       <div className="mt-5">
         <h3>Registration</h3>
-        <form onSubmit={this.handleSubmit} className="w-50 mt-5">
+        <form onSubmit={this.handleSubmit} className="col-md-6 mt-5">
           <div className="form-group mb-3">
             <label>IRL Name</label>
             <InputGroup>
