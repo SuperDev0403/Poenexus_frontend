@@ -12,10 +12,10 @@ class HomePage extends Component {
       <div>
         <Header />
         <div className="container">
-          <div className="mt-4">
+          <div className="mt-4 mb-5">
             <h1>Welcome info</h1>
           </div>
-          <div>
+          <div className="mt-5">
             <h1>Registration</h1>
           </div>
         </div>
