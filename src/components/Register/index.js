@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-// import PoenexusService from "../../services/PoenexusService";
+import PoenexusService from "../../services/PoenexusService";
 import { Button, InputGroup, FormControl, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,7 +8,6 @@ import {
   faEye,
   faEyeSlash,
   faLock,
-  faUser,
   faUserAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
@@ -22,7 +21,6 @@ class Register extends Component {
       confirmType: "password",
       password: "",
       cpassword: "",
-      irlName: "",
       siteName: "",
       email: "",
       loadingFlag: false,
@@ -48,23 +46,42 @@ class Register extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    if (this.state.password !== this.state.cpassword) {
-      toast.success("Password is not matched", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
-      });
-    }
-
     this.setState({ loadingFlag: true });
     const payload = {
-      irlName: this.state.irlName,
-      siteName: this.state.siteName,
+      name: this.state.siteName,
       email: this.state.email,
       password: this.state.password,
-      cpassword: this.state.cpassword,
+      password_confirmation: this.state.cpassword,
     };
 
-    console.log("payload: ", payload);
+    PoenexusService.register(payload)
+      .then((res) => {
+        this.setState({ loadingFlag: false });
+        if (res.status === 400) {
+          var error = JSON.parse(res.data);
+          for (let i = 0; i < Object.keys(error).length; i++) {
+            toast.error(
+              Object.keys(error)[i] + " : " + Object.values(error)[i][0],
+              {
+                position: toast.POSITION.TOP_RIGHT,
+              }
+            );
+          }
+        } else {
+          toast.success("Registered Successfully", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          this.setState({
+            siteName: "",
+            email: "",
+            password: "",
+            cpassword: "",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
   };
 
   render() {
@@ -72,7 +89,7 @@ class Register extends Component {
       <div className="mt-5">
         <h3>Registration</h3>
         <form onSubmit={this.handleSubmit} className="col-md-6 mt-5">
-          <div className="form-group mb-3">
+          {/* <div className="form-group mb-3">
             <label>IRL Name</label>
             <InputGroup>
               <InputGroup.Append>
@@ -88,7 +105,7 @@ class Register extends Component {
                 required
               />
             </InputGroup>
-          </div>
+          </div> */}
           <div className="form-group mb-3">
             <label>Site Username (Not your IGN)</label>
             <InputGroup>
@@ -135,6 +152,7 @@ class Register extends Component {
               <FormControl
                 placeholder="Create Password"
                 type={this.state.pwdType}
+                value={this.state.password}
                 id="password"
                 name="password"
                 onChange={this.handleChange}
@@ -162,6 +180,7 @@ class Register extends Component {
               <FormControl
                 placeholder="Confirm Password"
                 type={this.state.confirmType}
+                value={this.state.cpassword}
                 id="confirm-pwd"
                 name="cpassword"
                 onChange={this.handleChange}
