@@ -20,7 +20,7 @@ class HomePage extends Component {
         <Header />
         <div className="container">
           <div className="mt-4 mb-5">
-            <div id="bodyDIV" class="flex">
+            <div id="bodyDIV" className="flex">
               <div id="bodyText">
                 <h1> Welcome to POENexus </h1>
                 <p>
