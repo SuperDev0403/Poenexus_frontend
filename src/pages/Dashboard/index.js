@@ -286,7 +286,7 @@ class Dashboard extends Component {
                         </p>
                       </div>
                     </div>
-                    <div className="form-group row">
+                    {/* <div className="form-group row">
                       <label className="mt-2 col-md-4">Trade Point:</label>
                       <div className="col-md-6">
                         <p className="mb-0 mt-2">
@@ -295,7 +295,7 @@ class Dashboard extends Component {
                             : this.state.tradePoint}
                         </p>
                       </div>
-                    </div>
+                    </div> */}
                     <h2 className="mt-4">IGNs</h2>
                     <div className="form-group row mb-3">
                       <label className="mt-2 col-md-4">IGN 1:</label>
