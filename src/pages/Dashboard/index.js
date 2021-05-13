@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import Header from "../../components/Header";
 import MenuBar from "../../components/MenuBar";
+import PoenexusService from "../../services/PoenexusService";
 
 import { Button, InputGroup, FormControl, Spinner } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -12,6 +15,7 @@ class Dashboard extends Component {
       email: "",
       irlName: "",
       discordId: "",
+      tradePoint: 0,
       ign1: "",
       ign2: "",
       ign3: "",
@@ -20,13 +24,73 @@ class Dashboard extends Component {
     };
   }
 
+  componentDidMount() {
+    var id = JSON.parse(localStorage.getItem("userinfo")).id;
+    const payload = {
+      id: id,
+    };
+    PoenexusService.getUserInfo(payload)
+      .then((res) => {
+        this.setState({
+          irlName: res.user.irlName,
+          discordId: res.user.discordId,
+          tradePoint: res.user.tradePoint,
+          ign1: res.user.ign1,
+          ign2: res.user.ign2,
+          ign3: res.user.ign3,
+        });
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
+  }
+
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  clickEdit = () => {
+    this.setState({
+      showForm: true,
+      accountName: JSON.parse(localStorage.getItem("user")).name,
+      email: JSON.parse(localStorage.getItem("user")).email,
+    });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    this.setState({ loadingFlag: true });
+    const payload = {
+      id: JSON.parse(localStorage.getItem("userinfo")).id,
+      accountName: this.state.accountName,
+      email: this.state.email,
+      irlName: this.state.irlName,
+      discordId: this.state.discordId,
+      tradePoint: this.state.tradePoint,
+      ign1: this.state.ign1,
+      ign2: this.state.ign2,
+      ign3: this.state.ign3,
+    };
+
+    PoenexusService.updateUserInfo(payload)
+      .then((res) => {
+        this.setState({ loadingFlag: false });
+        if (res.user === 1) {
+          toast.success("User information saved successfully", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          setTimeout(() => window.location.reload(false), 3001);
+        }
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
+  };
+
   render() {
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log("user: ", user);
     return (
       <div>
         <Header />
@@ -175,6 +239,17 @@ class Dashboard extends Component {
                           ""
                         )}
                       </Button>
+                      <Button
+                        variant="secondary"
+                        type="submit"
+                        className="w-25 mt-3 mb-5"
+                        style={{ marginLeft: "1rem" }}
+                        onClick={() =>
+                          this.setState({ showForm: !this.state.showForm })
+                        }
+                      >
+                        CANCEL
+                      </Button>
                     </div>
                   </form>
                 ) : (
@@ -194,38 +269,56 @@ class Dashboard extends Component {
                     <div className="form-group row mb-3">
                       <label className="mt-2 col-md-4">IRL Name:</label>
                       <div className="col-md-6">
-                        <p className="mb-0 mt-2">N/A</p>
+                        <p className="mb-0 mt-2">
+                          {this.state.irlName === null
+                            ? "N/A"
+                            : this.state.irlName}
+                        </p>
                       </div>
                     </div>
                     <div className="form-group row mb-3">
                       <label className="mt-2 col-md-4">Discord ID:</label>
                       <div className="col-md-6">
-                        <p className="mb-0 mt-2">N/A</p>
+                        <p className="mb-0 mt-2">
+                          {this.state.discordId === null
+                            ? "N/A"
+                            : this.state.discordId}
+                        </p>
                       </div>
                     </div>
                     <div className="form-group row">
                       <label className="mt-2 col-md-4">Trade Point:</label>
                       <div className="col-md-6">
-                        <p className="mb-0 mt-2">N/A</p>
+                        <p className="mb-0 mt-2">
+                          {this.state.tradePoint === null
+                            ? "N/A"
+                            : this.state.tradePoint}
+                        </p>
                       </div>
                     </div>
                     <h2 className="mt-4">IGNs</h2>
                     <div className="form-group row mb-3">
                       <label className="mt-2 col-md-4">IGN 1:</label>
                       <div className="col-md-6">
-                        <p className="mb-0 mt-2">N/A</p>
+                        <p className="mb-0 mt-2">
+                          {this.state.ign1 === null ? "N/A" : this.state.ign1}
+                        </p>
                       </div>
                     </div>
                     <div className="form-group row mb-3">
                       <label className="mt-2 col-md-4">IGN 2:</label>
                       <div className="col-md-6">
-                        <p className="mb-0 mt-2">N/A</p>
+                        <p className="mb-0 mt-2">
+                          {this.state.ign2 === null ? "N/A" : this.state.ign2}
+                        </p>
                       </div>
                     </div>
                     <div className="form-group row mb-3">
                       <label className="mt-2 col-md-4">IGN 3:</label>
                       <div className="col-md-6">
-                        <p className="mb-0 mt-2">N/A</p>
+                        <p className="mb-0 mt-2">
+                          {this.state.ign3 === null ? "N/A" : this.state.ign3}
+                        </p>
                       </div>
                     </div>
                     <div>
@@ -233,7 +326,7 @@ class Dashboard extends Component {
                         variant="success"
                         type="submit"
                         className="w-25 mt-3 mb-5"
-                        onClick={() => this.setState({ showForm: true })}
+                        onClick={this.clickEdit}
                       >
                         EDIT
                       </Button>
@@ -258,6 +351,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
     );
   }

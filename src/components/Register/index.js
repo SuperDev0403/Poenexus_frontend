@@ -70,6 +70,7 @@ class Register extends Component {
         } else {
           toast.success("Registered Successfully", {
             position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
           });
           this.setState({
             siteName: "",

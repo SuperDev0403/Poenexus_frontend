@@ -66,9 +66,9 @@ class Header extends Component {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-
           this.setState({ email: "", password: "", showModal: false });
           localStorage.setItem("user", JSON.stringify(res.user));
+          localStorage.setItem("userinfo", JSON.stringify(res.userinfo));
           setTimeout(() => localStorage.setItem("token", res.token), 3001);
           setTimeout(() => this.props.history.push("/dashboard"), 3002);
         }
