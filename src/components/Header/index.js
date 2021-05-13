@@ -170,7 +170,7 @@ class Header extends Component {
                     </InputGroup.Text>
                   </InputGroup.Append>
                   <FormControl
-                    placeholder="Create Password"
+                    placeholder="Password"
                     type={this.state.pwdType}
                     value={this.state.password}
                     id="password"
