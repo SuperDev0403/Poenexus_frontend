@@ -337,7 +337,7 @@ class Dashboard extends Component {
               <div className="col-md-6">
                 <h2>Tier X</h2>
                 <div className="mt-4">
-                  <p>Trader Rating : XXXX</p>
+                  <p>Trader Rating : {this.state.tradePoint}</p>
                   <p>___</p>
                 </div>
               </div>
