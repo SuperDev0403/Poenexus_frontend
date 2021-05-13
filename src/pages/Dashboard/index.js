@@ -174,11 +174,11 @@ class Dashboard extends Component {
                         <InputGroup>
                           <FormControl
                             type="number"
-                            placeholder="Trade Point"
                             value={this.state.tradePoint}
                             name="tradePoint"
                             onChange={this.handleChange}
                             required
+                            disabled
                           />
                         </InputGroup>
                       </div>
