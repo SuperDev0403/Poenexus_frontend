@@ -188,6 +188,11 @@ class Sell extends Component {
 
   render() {
     const { SearchBar } = Search;
+    const selectRow = {
+      mode: "radio",
+      clickToSelect: true,
+      classes: "select-row",
+    };
     return (
       <div>
         <Header />
@@ -329,12 +334,8 @@ class Sell extends Component {
                     <div id={this.state.selectedService + "table"}>
                       <ToolkitProvider
                         bootstrap4
-                        keyField="id"
                         data={this.state.products}
                         columns={this.state.columns}
-                        hover
-                        striped
-                        condensed
                         search
                       >
                         {(props) => (
@@ -343,7 +344,9 @@ class Sell extends Component {
                             <hr />
                             <BootstrapTable
                               {...props.baseProps}
+                              keyField="no"
                               pagination={paginationFactory()}
+                              selectRow={selectRow}
                               hover
                               striped
                               condensed
