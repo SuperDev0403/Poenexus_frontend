@@ -11,3 +11,48 @@
         margin-left: 1rem;
     }
 }
+
+.ml-3 {
+    margin-left: 1rem;
+}
+
+#benchtable {
+    thead {
+        tr{
+            th:nth-child(4), th:nth-child(5){
+                width: 10%;
+            }
+            th:nth-child(1){
+                width: 5%;
+            }
+        }
+    }
+}
+
+#harvesttable {
+    thead {
+        tr{
+            th:nth-child(3), th:nth-child(4), th:nth-child(5), th:nth-child(6), th:nth-child(7){
+                width: 10%;
+            }
+            
+            th:nth-child(1){
+                width: 5%;
+            }
+        }
+    }
+}
+
+#syndicatetable {
+    thead {
+        tr{
+            th:nth-child(2), th:nth-child(3), th:nth-child(4), th:nth-child(5){
+                width: 10%;
+            }
+            
+            th:nth-child(1){
+                width: 5%;
+            }
+        }
+    }
+}

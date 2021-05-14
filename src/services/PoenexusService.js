@@ -49,6 +49,14 @@ class PoenexusService {
       .then((res) => res.data)
       .catch((err) => err.response);
   };
+
+  getSellData = () => {
+    const api = Config.API_URL;
+    return axios
+      .get(`${api}/getSellData`)
+      .then((res) => res.data)
+      .catch((err) => err.response);
+  };
 }
 
 export default new PoenexusService();
