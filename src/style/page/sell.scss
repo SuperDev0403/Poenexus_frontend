@@ -19,10 +19,10 @@
 #benchtable {
     thead {
         tr{
-            th:nth-child(4), th:nth-child(5){
+            th:nth-child(5), th:nth-child(6){
                 width: 10%;
             }
-            th:nth-child(1){
+            th:nth-child(2){
                 width: 5%;
             }
         }
@@ -32,11 +32,11 @@
 #harvesttable {
     thead {
         tr{
-            th:nth-child(3), th:nth-child(4), th:nth-child(5), th:nth-child(6), th:nth-child(7){
+            th:nth-child(4), th:nth-child(5), th:nth-child(6), th:nth-child(7), th:nth-child(8){
                 width: 10%;
             }
             
-            th:nth-child(1){
+            th:nth-child(2){
                 width: 5%;
             }
         }
@@ -46,11 +46,11 @@
 #syndicatetable {
     thead {
         tr{
-            th:nth-child(2), th:nth-child(3), th:nth-child(4), th:nth-child(5){
+            th:nth-child(3), th:nth-child(4), th:nth-child(5), th:nth-child(6){
                 width: 10%;
             }
             
-            th:nth-child(1){
+            th:nth-child(2){
                 width: 5%;
             }
         }
