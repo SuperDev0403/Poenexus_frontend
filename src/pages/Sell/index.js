@@ -77,7 +77,7 @@ class Sell extends Component {
         ];
         for (let i = 0; i < serviceData.length; i++) {
           products.push({
-            no: i,
+            no: i + 1,
             craft: serviceData[i].CRAFT,
             craft2: serviceData[i].CRAFT2,
             cost: serviceData[i].COST,
@@ -126,7 +126,7 @@ class Sell extends Component {
         ];
         for (let i = 0; i < serviceData.length; i++) {
           products.push({
-            no: i,
+            no: i + 1,
             craft: serviceData[i].CRAFT,
             tag1: serviceData[i].TAG1,
             tag2: serviceData[i].TAG2,
@@ -172,7 +172,7 @@ class Sell extends Component {
         ];
         for (let i = 0; i < serviceData.length; i++) {
           products.push({
-            no: i,
+            no: i + 1,
             name: serviceData[i].NAME,
             location: serviceData[i].LOCATION,
             rank: serviceData[i].RANK,
@@ -184,9 +184,6 @@ class Sell extends Component {
         break;
       default:
     }
-    // for (let i = 0; i < serviceData.length; i++) {
-    //   columns.push({});
-    // }
   };
 
   render() {
