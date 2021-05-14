@@ -73,14 +73,6 @@ class Dashboard extends Component {
       ign3: this.state.ign3,
     };
 
-    const igns = {
-      ign1: this.state.ign1,
-      ign2: this.state.ign2,
-      ign3: this.state.ign3,
-    };
-
-    localStorage.setItem("igns", JSON.stringify(igns));
-
     PoenexusService.updateUserInfo(payload)
       .then((res) => {
         this.setState({ loadingFlag: false });

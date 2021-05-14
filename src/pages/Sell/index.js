@@ -192,7 +192,6 @@ class Sell extends Component {
       classes: "select-row",
     };
 
-    const igns = JSON.parse(localStorage.getItem("igns"));
     return (
       <div>
         <Header />
@@ -272,14 +271,14 @@ class Sell extends Component {
                   <div className="div_radio mt-3 d-flex">
                     <p className="mb-0">Choose a car:</p>
                     <select id="ign">
-                      {Object.keys(igns).map((ign, i) => (
+                      {/* {Object.keys(igns).map((ign, i) => (
                         <option value={ign} key={i}>
                           {igns[ign]}
                         </option>
-                      ))}
-                      {/* <option value="ign1">ign1</option>
+                      ))} */}
+                      <option value="ign1">ign1</option>
                       <option value="ign2">ign2</option>
-                      <option value="ign3">ign3</option> */}
+                      <option value="ign3">ign3</option>
                     </select>
                   </div>
                 </div>
