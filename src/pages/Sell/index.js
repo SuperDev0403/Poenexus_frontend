@@ -331,7 +331,10 @@ class Sell extends Component {
                       Please select service type
                     </p>
                   ) : (
-                    <div id={this.state.selectedService + "table"}>
+                    <div
+                      id={this.state.selectedService + "table"}
+                      className="ml-3"
+                    >
                       <ToolkitProvider
                         bootstrap4
                         data={this.state.products}
