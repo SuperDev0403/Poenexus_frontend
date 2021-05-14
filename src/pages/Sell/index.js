@@ -5,8 +5,6 @@ import PoenexusService from "../../services/PoenexusService";
 
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
 
@@ -26,7 +24,6 @@ class Sell extends Component {
   }
 
   componentDidMount() {
-    console.log("111");
     PoenexusService.getSellData()
       .then((res) => {
         console.log("res: ", res);
@@ -43,6 +40,7 @@ class Sell extends Component {
   }
 
   changeService = (e) => {
+    this.setState({ columns: [], products: [] });
     var serviceData = this.state[e.target.value];
     var columns = [];
     var products = [];
@@ -193,6 +191,8 @@ class Sell extends Component {
       clickToSelect: true,
       classes: "select-row",
     };
+
+    const igns = JSON.parse(localStorage.getItem("igns"));
     return (
       <div>
         <Header />
@@ -272,9 +272,14 @@ class Sell extends Component {
                   <div className="div_radio mt-3 d-flex">
                     <p className="mb-0">Choose a car:</p>
                     <select id="ign">
-                      <option value="ign1">ign1</option>
+                      {Object.keys(igns).map((ign, i) => (
+                        <option value={ign} key={i}>
+                          {igns[ign]}
+                        </option>
+                      ))}
+                      {/* <option value="ign1">ign1</option>
                       <option value="ign2">ign2</option>
-                      <option value="ign3">ign3</option>
+                      <option value="ign3">ign3</option> */}
                     </select>
                   </div>
                 </div>
@@ -348,7 +353,6 @@ class Sell extends Component {
                             <BootstrapTable
                               {...props.baseProps}
                               keyField="no"
-                              pagination={paginationFactory()}
                               selectRow={selectRow}
                               hover
                               striped

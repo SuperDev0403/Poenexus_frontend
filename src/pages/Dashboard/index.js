@@ -73,6 +73,14 @@ class Dashboard extends Component {
       ign3: this.state.ign3,
     };
 
+    const igns = {
+      ign1: this.state.ign1,
+      ign2: this.state.ign2,
+      ign3: this.state.ign3,
+    };
+
+    localStorage.setItem("igns", JSON.stringify(igns));
+
     PoenexusService.updateUserInfo(payload)
       .then((res) => {
         this.setState({ loadingFlag: false });
@@ -149,7 +157,6 @@ class Dashboard extends Component {
                             value={this.state.irlName}
                             name="irlName"
                             onChange={this.handleChange}
-                            required
                           />
                         </InputGroup>
                       </div>
@@ -163,22 +170,6 @@ class Dashboard extends Component {
                             value={this.state.discordId}
                             name="discordId"
                             onChange={this.handleChange}
-                            required
-                          />
-                        </InputGroup>
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="mt-2 col-md-4">Trade Point:</label>
-                      <div className="col-md-6">
-                        <InputGroup>
-                          <FormControl
-                            type="number"
-                            value={this.state.tradePoint}
-                            name="tradePoint"
-                            onChange={this.handleChange}
-                            required
-                            disabled
                           />
                         </InputGroup>
                       </div>
@@ -207,7 +198,6 @@ class Dashboard extends Component {
                             value={this.state.ign2}
                             name="ign2"
                             onChange={this.handleChange}
-                            required
                           />
                         </InputGroup>
                       </div>
@@ -221,7 +211,6 @@ class Dashboard extends Component {
                             value={this.state.ign3}
                             name="ign3"
                             onChange={this.handleChange}
-                            required
                           />
                         </InputGroup>
                       </div>
