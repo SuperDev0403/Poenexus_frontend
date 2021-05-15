@@ -50,10 +50,14 @@ class PoenexusService {
       .catch((err) => err.response);
   };
 
-  getSellData = () => {
+  getSellData = (data) => {
     const api = Config.API_URL;
     return axios
-      .get(`${api}/getSellData`)
+      .post(`${api}/getSellData`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => res.data)
       .catch((err) => err.response);
   };

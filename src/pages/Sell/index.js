@@ -20,11 +20,16 @@ class Sell extends Component {
       syndicate: [],
       columns: [],
       products: [],
+      igns: [],
     };
   }
 
   componentDidMount() {
-    PoenexusService.getSellData()
+    console.log(localStorage.getItem("userinfo"));
+    const payload = {
+      userId: JSON.parse(localStorage.getItem("userinfo")).id,
+    };
+    PoenexusService.getSellData(payload)
       .then((res) => {
         console.log("res: ", res);
         this.setState({
@@ -32,6 +37,7 @@ class Sell extends Component {
           harvest: res.harvest,
           syndicate: res.syndicate,
           loading: false,
+          igns: [res.userinfo.ign1, res.userinfo.ign2, res.userinfo.ign3],
         });
       })
       .catch((err) => {
@@ -192,6 +198,8 @@ class Sell extends Component {
       classes: "select-row",
     };
 
+    const igns = this.state.igns;
+
     return (
       <div>
         <Header />
@@ -271,14 +279,11 @@ class Sell extends Component {
                   <div className="div_radio mt-3 d-flex">
                     <p className="mb-0">Choose a car:</p>
                     <select id="ign">
-                      {/* {Object.keys(igns).map((ign, i) => (
+                      {igns.map((ign, i) => (
                         <option value={ign} key={i}>
-                          {igns[ign]}
+                          {ign}
                         </option>
-                      ))} */}
-                      <option value="ign1">ign1</option>
-                      <option value="ign2">ign2</option>
-                      <option value="ign3">ign3</option>
+                      ))}
                     </select>
                   </div>
                 </div>
