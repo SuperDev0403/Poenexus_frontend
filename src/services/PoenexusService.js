@@ -80,6 +80,26 @@ class PoenexusService {
       .then((res) => res.data)
       .catch((err) => err.response);
   };
+
+  getBuyData = (data) => {
+    const api = Config.API_URL;
+    return axios
+      .post(`${api}/getBuyData`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => res.data)
+      .catch((err) => err.response);
+  };
+
+  getPriceChaos = () => {
+    const api = Config.API_URL;
+    return axios
+      .get(`${api}/getPriceChaos`)
+      .then((res) => res.data)
+      .catch((err) => err.response);
+  };
 }
 
 export default new PoenexusService();

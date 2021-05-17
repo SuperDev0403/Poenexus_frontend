@@ -227,6 +227,8 @@ class Sell extends Component {
   changeHandle = (e) => {
     if (e.target.name === "security" && e.target.value === "Collateral") {
       this.setState({ requireCollat: true });
+    } else if (e.target.name === "security" && e.target.value === "Unsecured") {
+      this.setState({ requireCollat: false });
     }
 
     this.setState({ [e.target.name]: e.target.value });
