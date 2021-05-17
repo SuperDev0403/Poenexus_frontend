@@ -405,7 +405,7 @@ class Sell extends Component {
                 <div className="mt-4">
                   <h4>User Options</h4>
                   <div className="div_radio mt-3 d-flex">
-                    <p className="mb-0">Choose a car:</p>
+                    <p className="mb-0">IGN:</p>
                     <select
                       name="ign"
                       onChange={this.changeHandle}
