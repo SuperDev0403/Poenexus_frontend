@@ -30,7 +30,6 @@ class Buy extends Component {
     };
     PoenexusService.getSellData(payload)
       .then((res) => {
-        console.log("res: ", res);
         this.setState({
           bench: res.bench,
           harvest: res.harvest,

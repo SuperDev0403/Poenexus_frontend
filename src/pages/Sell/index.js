@@ -8,7 +8,10 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
 
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class Sell extends Component {
   constructor(props) {
@@ -21,17 +24,31 @@ class Sell extends Component {
       columns: [],
       products: [],
       igns: [],
+      league: "",
+      gamemode: "",
+      service: "",
+      ign: "",
+      security: "",
+      collat: 0,
+      requireCollat: false,
+      chaos: "",
+      exalted: "",
+      objId: null,
+      loadingFlag: false,
+    };
+    this.rowEvent = {
+      onClick: (e, row, rowIndex) => {
+        this.setState({ objId: row.uid });
+      },
     };
   }
 
   componentDidMount() {
-    console.log(localStorage.getItem("userinfo"));
     const payload = {
       userId: JSON.parse(localStorage.getItem("userinfo")).id,
     };
     PoenexusService.getSellData(payload)
       .then((res) => {
-        console.log("res: ", res);
         this.setState({
           bench: res.bench,
           harvest: res.harvest,
@@ -43,10 +60,27 @@ class Sell extends Component {
       .catch((err) => {
         console.log("Error:", err);
       });
+    PoenexusService.getGameMode()
+      .then((res) => {
+        var notNullArray = [];
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].endAt !== null) {
+            notNullArray.push(res[i]);
+          }
+        }
+        this.setState({ league: notNullArray[0].id });
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
   }
 
   changeService = (e) => {
-    this.setState({ columns: [], products: [] });
+    this.setState({
+      columns: [],
+      products: [],
+      [e.target.name]: e.target.value,
+    });
     var serviceData = this.state[e.target.value];
     var columns = [];
     var products = [];
@@ -54,8 +88,8 @@ class Sell extends Component {
       case "bench":
         columns = [
           {
-            dataField: "no",
-            text: "#",
+            dataField: "uid",
+            text: "UID",
             sort: true,
           },
           {
@@ -81,7 +115,7 @@ class Sell extends Component {
         ];
         for (let i = 0; i < serviceData.length; i++) {
           products.push({
-            no: i + 1,
+            uid: serviceData[i].UID,
             craft: serviceData[i].CRAFT,
             craft2: serviceData[i].CRAFT2,
             cost: serviceData[i].COST,
@@ -93,8 +127,8 @@ class Sell extends Component {
       case "harvest":
         columns = [
           {
-            dataField: "no",
-            text: "#",
+            dataField: "uid",
+            text: "UID",
             sort: true,
           },
           {
@@ -130,7 +164,7 @@ class Sell extends Component {
         ];
         for (let i = 0; i < serviceData.length; i++) {
           products.push({
-            no: i + 1,
+            uid: serviceData[i].UID,
             craft: serviceData[i].CRAFT,
             tag1: serviceData[i].TAG1,
             tag2: serviceData[i].TAG2,
@@ -144,8 +178,8 @@ class Sell extends Component {
       case "syndicate":
         columns = [
           {
-            dataField: "no",
-            text: "#",
+            dataField: "uid",
+            text: "UID",
             sort: true,
           },
           {
@@ -176,7 +210,7 @@ class Sell extends Component {
         ];
         for (let i = 0; i < serviceData.length; i++) {
           products.push({
-            no: i + 1,
+            uid: serviceData[i].UID,
             name: serviceData[i].NAME,
             location: serviceData[i].LOCATION,
             rank: serviceData[i].RANK,
@@ -190,12 +224,78 @@ class Sell extends Component {
     }
   };
 
+  changeHandle = (e) => {
+    if (e.target.name === "security" && e.target.value === "Collateral") {
+      this.setState({ requireCollat: true });
+    }
+
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    this.setState({ loadingFlag: true });
+
+    var currentdate = new Date();
+    const timestamp =
+      currentdate.getFullYear() +
+      "-" +
+      (currentdate.getMonth() + 1) +
+      "-" +
+      currentdate.getDate() +
+      " " +
+      currentdate.getHours() +
+      "-" +
+      currentdate.getMinutes() +
+      "-" +
+      currentdate.getSeconds();
+
+    const payload = {
+      userId: JSON.parse(localStorage.getItem("userinfo")).id,
+      mode: this.state.gamemode,
+      type: this.state.service,
+      ign: this.state.ign,
+      security: this.state.security,
+      collat: this.state.collat,
+      objid: this.state.objId,
+      price_c: this.state.chaos,
+      price_ex: this.state.exalted,
+      timestamp: timestamp,
+      available: true,
+    };
+
+    PoenexusService.saveSell(payload)
+      .then((res) => {
+        this.setState({ loadingFlag: false });
+        if (res.status === 500) {
+          toast.error("Error", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        } else {
+          toast.success("Sell data is saved successfully", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+        setTimeout(() => window.location.reload(false), 3001);
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
+  };
+
   render() {
     const { SearchBar } = Search;
     const selectRow = {
       mode: "radio",
       clickToSelect: true,
       classes: "select-row",
+      style: () => {
+        const backgroundColor = "#bfbfbf";
+        return { backgroundColor };
+      },
     };
 
     const igns = this.state.igns;
@@ -210,29 +310,57 @@ class Sell extends Component {
           ) : (
             <div className="mt-4 mb-5">
               <h1>Sell</h1>
-              <form>
+              <form onSubmit={this.handleSubmit}>
                 <div className="mt-4">
                   <h4>Game Mode</h4>
                   <div className="div_radio mt-3">
                     <div>
                       <input
                         type="radio"
-                        id="stand"
+                        id="Standard-SC"
                         name="gamemode"
-                        value="stand"
+                        value="Standard-SC"
+                        onChange={this.changeHandle}
                         required
                       />
-                      <label htmlFor="stand">Standard Trade</label>
+                      <label htmlFor="Standard-SC">Standard-SC</label>
                     </div>
                     <div>
                       <input
                         type="radio"
-                        id="league"
+                        id="Standard-HC"
                         name="gamemode"
-                        value="league"
+                        value="Standard-HC"
                         required
+                        onChange={this.changeHandle}
                       />
-                      <label htmlFor="league">league</label>
+                      <label htmlFor="Standard-HC">Standard-HC</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id={"League-SC-" + this.state.league}
+                        name="gamemode"
+                        value={"League-SC-" + this.state.league}
+                        required
+                        onChange={this.changeHandle}
+                      />
+                      <label htmlFor={"League-SC-" + this.state.league}>
+                        League-SC-{this.state.league}
+                      </label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id={"League-HC-" + this.state.league}
+                        name="gamemode"
+                        value={"League-HC-" + this.state.league}
+                        required
+                        onChange={this.changeHandle}
+                      />
+                      <label htmlFor={"League-HC-" + this.state.league}>
+                        League-HC-{this.state.league}
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -278,7 +406,15 @@ class Sell extends Component {
                   <h4>User Options</h4>
                   <div className="div_radio mt-3 d-flex">
                     <p className="mb-0">Choose a car:</p>
-                    <select id="ign">
+                    <select
+                      name="ign"
+                      onChange={this.changeHandle}
+                      defaultValue={""}
+                      required
+                    >
+                      <option value="" disabled>
+                        Please select
+                      </option>
                       {igns.map((ign, i) => (
                         <option value={ign} key={i}>
                           {ign}
@@ -293,25 +429,36 @@ class Sell extends Component {
                     <div>
                       <input
                         type="radio"
-                        id="unsecured"
-                        name="trade"
-                        value="unsecured"
+                        id="Unsecured"
+                        name="security"
+                        value="Unsecured"
+                        onChange={this.changeHandle}
                         required
                       />
-                      <label htmlFor="unsecured">Unsecured</label>
+                      <label htmlFor="Unsecured">Unsecured</label>
                     </div>
                     <div>
                       <input
                         type="radio"
-                        id="collateral"
-                        name="trade"
-                        value="collateral"
+                        id="Collateral"
+                        name="security"
+                        value="Collateral"
+                        onChange={this.changeHandle}
                         required
                       />
 
-                      <label htmlFor="collateral">
+                      <label htmlFor="Collateral">
                         Required Collateral:
-                        <input type="number" />
+                        {this.state.requireCollat ? (
+                          <input
+                            type="number"
+                            name="collat"
+                            onChange={this.changeHandle}
+                            required
+                          />
+                        ) : (
+                          <input type="number" name="collat" disabled />
+                        )}
                         Exalteds
                       </label>
                     </div>
@@ -356,11 +503,12 @@ class Sell extends Component {
                             <hr />
                             <BootstrapTable
                               {...props.baseProps}
-                              keyField="no"
+                              keyField="uid"
                               selectRow={selectRow}
                               hover
                               striped
                               condensed
+                              rowEvents={this.rowEvent}
                             />
                           </div>
                         )}
@@ -371,27 +519,40 @@ class Sell extends Component {
                   <div className="div_radio mt-3">
                     <h5>Price</h5>
                     <div className="mb-3">
-                      <input type="number" name="chaos" />
+                      <input
+                        type="number"
+                        name="chaos"
+                        value={this.state.chaos}
+                        onChange={this.changeHandle}
+                        required
+                      />
                       <label htmlFor="chaos">Chaos</label>
                     </div>
                     <div>
-                      <input type="number" name="exalted" />
+                      <input
+                        type="number"
+                        name="exalted"
+                        value={this.state.exalted}
+                        onChange={this.changeHandle}
+                        required
+                      />
                       <label htmlFor="exalted">Exalted</label>
                     </div>
                   </div>
                 </div>
                 <Button variant="success" type="submit" className="mt-3">
                   Submit
-                  {/* {this.state.loadingFlag === true ? (
-                  <Spinner animation="border" />
-                ) : (
-                  ""
-                )} */}
+                  {this.state.loadingFlag === true ? (
+                    <Spinner animation="border" />
+                  ) : (
+                    ""
+                  )}
                 </Button>
               </form>
             </div>
           )}
         </div>
+        <ToastContainer />
       </div>
     );
   }
