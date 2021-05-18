@@ -23,20 +23,21 @@ class Buy extends Component {
       products: [],
       igns: [],
       league: "",
-      requireCollat: false,
       gamemode: "",
       priceChaos: null,
       selectdObjCraft: "",
+      selectdObjUid: null,
       lowestPrice: null,
       totalAvailable: null,
       avgPrice: null,
       checkedUnsecured: false,
       checkedCollateral: false,
+      checkedEscrow: false,
       collat: 0,
     };
     this.rowEvent = {
       onClick: (e, row, rowIndex) => {
-        this.setState({ selectdObjCraft: row.craft });
+        this.setState({ selectdObjCraft: row.craft, selectdObjUid: row.uid });
       },
     };
   }
@@ -240,11 +241,16 @@ class Buy extends Component {
   changeHandle = (e) => {
     if (e.target.name === "security" && e.target.value === "Collateral") {
       this.setState({
-        requireCollat: true,
         checkedCollateral: !this.state.checkedCollateral,
       });
     } else if (e.target.name === "security" && e.target.value === "Unsecured") {
       this.setState({ checkedUnsecured: !this.state.checkedUnsecured });
+    } else if (e.target.name === "security" && e.target.value === "Escrow") {
+      this.setState({ checkedEscrow: !this.state.checkedEscrow });
+    }
+
+    if (e.target.name === "service") {
+      this.setState({ selectdObjUid: null });
     }
 
     this.setState({ [e.target.name]: e.target.value });
@@ -261,55 +267,74 @@ class Buy extends Component {
 
     const igns = this.state.igns;
 
+    var lowest = null;
+    var count = null;
+    var avgValue = null;
+
     if (!this.state.loading) {
       var sell = this.state.sell;
-      var filteredSell = null;
-      switch (
-        this.state.checkedUnsecured.toString() +
-        this.state.checkedCollateral.toString()
-      ) {
-        case "truetrue":
-          filteredSell = sell;
-          break;
-        case "truefalse":
-          filteredSell = sell.filter((value) => {
-            const searchStr = "Unsecured".toLowerCase();
-            const matches = value.security.toLowerCase().includes(searchStr);
-            return matches;
-          });
-          break;
-        case "falsefalse":
-          filteredSell = [];
-          break;
-        case "falsetrue":
-          filteredSell = sell.filter((value) => {
-            const searchStr = "Collateral".toLowerCase();
-            const matches = value.security.toLowerCase().includes(searchStr);
-            return matches;
-          });
-          break;
-        default:
+      var filteredSell = [];
+
+      if (this.state.checkedUnsecured) {
+        for (let i = 0; i < sell.length; i++) {
+          if (sell[i].security === "Unsecured") {
+            filteredSell.push(sell[i]);
+          }
+        }
       }
 
-      console.log("filteredSell: ", filteredSell);
-      console.log("collat: ", Number(this.state.collat));
+      if (this.state.checkedCollateral) {
+        for (let i = 0; i < sell.length; i++) {
+          if (sell[i].security === "Collateral") {
+            filteredSell.push(sell[i]);
+          }
+        }
+        var collat = Number(this.state.collat);
 
-      // var filtered2Sell = filteredSell;
-      // for (let i = 0; i < filteredSell.length; i++) {
-      //   if (filteredSell[i].security !== "Unsecured") {
-      //     if (filteredSell[i].collat >= Number(this.state.collat)) {
-      //       console.log("i", i);
-      //       filteredSell.splice(i, 1);
-      //     }
-      //   }
-      // }
-      // filtered2Sell = filteredSell.filter((value) => {
-      //   const searchStr = Number(this.state.collat);
-      //   const matches = value.collat < searchStr;
-      //   return matches;
-      // });
+        filteredSell = filteredSell.filter(function (item) {
+          if (item.security === "Collateral" && item.collat >= collat)
+            return false;
+          return true;
+        });
+      }
 
-      // console.log("filtered2Sell: ", filtered2Sell);
+      if (this.state.checkedEscrow) {
+        for (let i = 0; i < sell.length; i++) {
+          if (sell[i].security === "Escrow") {
+            filteredSell.push(sell[i]);
+          }
+        }
+      }
+
+      var finalSell = [];
+      for (let i = 0; i < filteredSell.length; i++) {
+        if (filteredSell[i].objid === this.state.selectdObjUid) {
+          finalSell.push(filteredSell[i]);
+        }
+      }
+
+      var convertedArr = [];
+
+      for (let i = 0; i < finalSell.length; i++) {
+        convertedArr.push(
+          Number(finalSell[i].price_ex) * this.state.priceChaos +
+            Number(finalSell[i].price_c)
+        );
+      }
+
+      count = finalSell.length;
+
+      lowest = convertedArr[0];
+
+      var sum = 0;
+      for (let i = 0; i < convertedArr.length; i++) {
+        if (lowest >= convertedArr[i]) {
+          lowest = convertedArr[i];
+        }
+        sum += convertedArr[i];
+      }
+
+      avgValue = sum / count;
     }
 
     return (
@@ -439,27 +464,24 @@ class Buy extends Component {
 
                         <label htmlFor="Collateral">
                           Collateral CAP:
-                          {this.state.requireCollat ? (
-                            <input
-                              type="number"
-                              name="collat"
-                              onChange={this.changeHandle}
-                            />
-                          ) : (
-                            <input type="number" name="collat" disabled />
-                          )}
+                          <input
+                            type="number"
+                            name="collat"
+                            value={this.state.collat}
+                            onChange={this.changeHandle}
+                          />
                           Exalteds
                         </label>
                       </div>
                       <div>
                         <input
                           type="checkbox"
-                          id="escrow"
-                          name="trade"
-                          value="escrow"
-                          disabled
+                          id="Escrow"
+                          name="security"
+                          value="Escrow"
+                          onChange={this.changeHandle}
                         />
-                        <label htmlFor="escrow">
+                        <label htmlFor="Escrow">
                           Escrow{" "}
                           <span className="text-danger">
                             *You must opt into and fund your Escrow account
@@ -514,18 +536,17 @@ class Buy extends Component {
                     <div className="row">
                       <div className="col-md-3">
                         <h6>
-                          Lowest Price: <span>{this.state.lowestPrice}</span>
+                          Lowest Price: <span>{lowest}</span>
                         </h6>
                       </div>
                       <div className="col-md-3">
                         <h6>
-                          Total Available:{" "}
-                          <span>{this.state.totalAvailable}</span>
+                          Total Available: <span>{count}</span>
                         </h6>
                       </div>
                       <div className="col-md-3">
                         <h6>
-                          AVG Price: <span>{this.state.avgPrice}</span>
+                          AVG Price: <span>{avgValue}</span>
                         </h6>
                       </div>
                       <div className="col-md-3">
