@@ -256,6 +256,7 @@ class Buy extends Component {
       mode: "radio",
       clickToSelect: true,
       classes: "select-row",
+      style: { background: "#7d7d7d" },
     };
 
     const igns = this.state.igns;
@@ -290,14 +291,25 @@ class Buy extends Component {
         default:
       }
 
-      var filtered2Sell = [];
-      filtered2Sell = filteredSell.filter((value) => {
-        const searchStr = Number(this.state.collat);
-        const matches = value.collat < searchStr;
-        return matches;
-      });
+      console.log("filteredSell: ", filteredSell);
+      console.log("collat: ", Number(this.state.collat));
 
-      console.log("filtered2Sell: ", filtered2Sell);
+      // var filtered2Sell = filteredSell;
+      // for (let i = 0; i < filteredSell.length; i++) {
+      //   if (filteredSell[i].security !== "Unsecured") {
+      //     if (filteredSell[i].collat >= Number(this.state.collat)) {
+      //       console.log("i", i);
+      //       filteredSell.splice(i, 1);
+      //     }
+      //   }
+      // }
+      // filtered2Sell = filteredSell.filter((value) => {
+      //   const searchStr = Number(this.state.collat);
+      //   const matches = value.collat < searchStr;
+      //   return matches;
+      // });
+
+      // console.log("filtered2Sell: ", filtered2Sell);
     }
 
     return (
@@ -426,7 +438,7 @@ class Buy extends Component {
                         />
 
                         <label htmlFor="Collateral">
-                          Required Collateral:
+                          Collateral CAP:
                           {this.state.requireCollat ? (
                             <input
                               type="number"
