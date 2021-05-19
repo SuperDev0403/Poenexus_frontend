@@ -305,7 +305,6 @@ class Buy extends Component {
               autoClose: 3000,
             });
           }
-          setTimeout(() => window.location.reload(false), 3001);
         })
         .catch((err) => {
           console.log("Error:", err);
@@ -424,6 +423,7 @@ class Buy extends Component {
                           value="Standard-SC"
                           onChange={this.changeHandle}
                           required
+                          disabled
                         />
                         <label htmlFor="Standard-SC">Standard-SC</label>
                       </div>
@@ -435,6 +435,7 @@ class Buy extends Component {
                           value="Standard-HC"
                           required
                           onChange={this.changeHandle}
+                          disabled
                         />
                         <label htmlFor="Standard-HC">Standard-HC</label>
                       </div>
@@ -446,6 +447,7 @@ class Buy extends Component {
                           value={"League-SC-" + this.state.league}
                           required
                           onChange={this.changeHandle}
+                          checked
                         />
                         <label htmlFor={"League-SC-" + this.state.league}>
                           League-SC-{this.state.league}
@@ -459,6 +461,7 @@ class Buy extends Component {
                           value={"League-HC-" + this.state.league}
                           required
                           onChange={this.changeHandle}
+                          disabled
                         />
                         <label htmlFor={"League-HC-" + this.state.league}>
                           League-HC-{this.state.league}
@@ -592,43 +595,47 @@ class Buy extends Component {
                     </div>
                   )}
                   <div className="mt-5 ml-3">
-                    <div className="mb-4">
-                      <h6>
+                    <div className="mb-4 d-flex">
+                      <h6 className="mt-1">
                         OBJ: <span>{this.state.selectdObjCraft}</span>
                       </h6>
+                      {!count ? (
+                        <h4 className="ml-3 text-danger">NONE FOUND</h4>
+                      ) : null}
                     </div>
                     <div className="row">
-                      <div className="col-md-3">
+                      <div className="col-md-3 mt-5">
                         <h6 className="d-flex">
                           <p className="mt-1">Lowest Price: </p>
                           {lowest ? (
                             <span className="mt-1 ml-3">{lowest}</span>
                           ) : (
-                            <h5 className="mb-0 ml-3">N/A</h5>
+                            <h5 className="mb-0 ml-3 text-danger">N/A</h5>
                           )}
                         </h6>
                       </div>
-                      <div className="col-md-3">
+                      <div className="col-md-3 mt-5">
                         <h6 className="d-flex">
                           <p className="mt-1">Total Available: </p>
                           {count ? (
                             <span className="mt-1 ml-3">{count}</span>
                           ) : (
-                            <h5 className="mb-0 ml-3">N/A</h5>
+                            <h5 className="mb-0 ml-3 text-danger">N/A</h5>
                           )}
                         </h6>
                       </div>
-                      <div className="col-md-3">
+                      <div className="col-md-3 mt-5">
                         <h6 className="d-flex">
                           <p className="mt-1">AVG Price: </p>
                           {avgValue ? (
                             <span className="mt-1 ml-3">{avgValue}</span>
                           ) : (
-                            <h5 className="mb-0 ml-3">N/A</h5>
+                            <h5 className="mb-0 ml-3 text-danger">N/A</h5>
                           )}
                         </h6>
                       </div>
                       <div className="col-md-3">
+                        <h5 className="mb-4 poeninja">POE.ninja</h5>
                         <h6 className="d-flex mt-1">
                           <p>1Ex: </p>
                           <p className="mb-0 ml-3">{this.state.priceChaos}</p>

@@ -266,7 +266,6 @@ class Sell extends Component {
             autoClose: 3000,
           });
         }
-        setTimeout(() => window.location.reload(false), 3001);
       })
       .catch((err) => {
         console.log("Error:", err);
@@ -435,7 +434,7 @@ class Sell extends Component {
                       />
 
                       <label htmlFor="Collateral">
-                        Required Collateral:
+                        Provided Collateral:
                         {this.state.requireCollat ? (
                           <input
                             type="number"
