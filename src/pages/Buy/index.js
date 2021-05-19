@@ -294,6 +294,18 @@ class Buy extends Component {
         .then((res) => {
           this.setState({ loadingFlag: false });
           console.log("res: ", res);
+          if (res.status === 500) {
+            toast.error("Error", {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+            });
+          } else {
+            toast.success("Transaction is saved successfully", {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+            });
+          }
+          setTimeout(() => window.location.reload(false), 3001);
         })
         .catch((err) => {
           console.log("Error:", err);
