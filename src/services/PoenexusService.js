@@ -100,6 +100,18 @@ class PoenexusService {
       .then((res) => res.data)
       .catch((err) => err.response);
   };
+
+  saveTransaction = (data) => {
+    const api = Config.API_URL;
+    return axios
+      .post(`${api}/saveTransaction`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => res.data)
+      .catch((err) => err.response);
+  };
 }
 
 export default new PoenexusService();

@@ -239,20 +239,6 @@ class Sell extends Component {
 
     this.setState({ loadingFlag: true });
 
-    var currentdate = new Date();
-    const timestamp =
-      currentdate.getFullYear() +
-      "-" +
-      (currentdate.getMonth() + 1) +
-      "-" +
-      currentdate.getDate() +
-      " " +
-      currentdate.getHours() +
-      "-" +
-      currentdate.getMinutes() +
-      "-" +
-      currentdate.getSeconds();
-
     const payload = {
       userId: JSON.parse(localStorage.getItem("userinfo")).id,
       mode: this.state.gamemode,
@@ -263,7 +249,6 @@ class Sell extends Component {
       objid: this.state.objId,
       price_c: this.state.chaos,
       price_ex: this.state.exalted,
-      timestamp: timestamp,
       available: true,
     };
 

@@ -8,7 +8,12 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
 
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+var Count = null;
+var FinalSell = null;
 
 class Buy extends Component {
   constructor(props) {
@@ -34,6 +39,7 @@ class Buy extends Component {
       checkedCollateral: false,
       checkedEscrow: false,
       collat: 0,
+      loadingFlag: false,
     };
     this.rowEvent = {
       onClick: (e, row, rowIndex) => {
@@ -256,6 +262,45 @@ class Buy extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    this.setState({ loadingFlag: true });
+    if (Count === 0) {
+      this.setState({ loadingFlag: false });
+      toast.error("No object available to buy", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+    } else {
+      FinalSell.sort(function (a, b) {
+        return a.converted - b.converted;
+      });
+
+      console.log("FinalSell: ", FinalSell);
+
+      const payload = {
+        sellObjId: FinalSell[0].id,
+        sellUid: this.state.selectdObjUid,
+        sellerId: FinalSell[0].userId,
+        sellIgn: FinalSell[0].ign,
+        buyerId: JSON.parse(localStorage.getItem("user")).id,
+        buyIgn: this.state.ign,
+        converted: FinalSell[0].converted,
+      };
+
+      console.log("payload: ", payload);
+      PoenexusService.saveTransaction(payload)
+        .then((res) => {
+          this.setState({ loadingFlag: false });
+          console.log("res: ", res);
+        })
+        .catch((err) => {
+          console.log("Error:", err);
+        });
+    }
+  };
+
   render() {
     const { SearchBar } = Search;
     const selectRow = {
@@ -320,7 +365,12 @@ class Buy extends Component {
           Number(finalSell[i].price_ex) * this.state.priceChaos +
             Number(finalSell[i].price_c)
         );
+        finalSell[i].converted =
+          Number(finalSell[i].price_ex) * this.state.priceChaos +
+          Number(finalSell[i].price_c);
       }
+
+      FinalSell = finalSell;
 
       count = finalSell.length;
 
@@ -337,6 +387,8 @@ class Buy extends Component {
       avgValue = sum / count;
     }
 
+    Count = count;
+
     return (
       <div>
         <Header />
@@ -347,7 +399,7 @@ class Buy extends Component {
           ) : (
             <div className="mt-4 mb-5">
               <h1>Buy</h1>
-              <form>
+              <form onSubmit={this.handleSubmit}>
                 <div className="row">
                   <div className="col-md-3">
                     <h4>Game Mode</h4>
@@ -535,23 +587,39 @@ class Buy extends Component {
                     </div>
                     <div className="row">
                       <div className="col-md-3">
-                        <h6>
-                          Lowest Price: <span>{lowest}</span>
+                        <h6 className="d-flex">
+                          <p className="mt-1">Lowest Price: </p>
+                          {lowest ? (
+                            <span className="mt-1 ml-3">{lowest}</span>
+                          ) : (
+                            <h5 className="mb-0 ml-3">N/A</h5>
+                          )}
                         </h6>
                       </div>
                       <div className="col-md-3">
-                        <h6>
-                          Total Available: <span>{count}</span>
+                        <h6 className="d-flex">
+                          <p className="mt-1">Total Available: </p>
+                          {count ? (
+                            <span className="mt-1 ml-3">{count}</span>
+                          ) : (
+                            <h5 className="mb-0 ml-3">N/A</h5>
+                          )}
                         </h6>
                       </div>
                       <div className="col-md-3">
-                        <h6>
-                          AVG Price: <span>{avgValue}</span>
+                        <h6 className="d-flex">
+                          <p className="mt-1">AVG Price: </p>
+                          {avgValue ? (
+                            <span className="mt-1 ml-3">{avgValue}</span>
+                          ) : (
+                            <h5 className="mb-0 ml-3">N/A</h5>
+                          )}
                         </h6>
                       </div>
                       <div className="col-md-3">
-                        <h6>
-                          1Ex: <span>{this.state.priceChaos}</span>
+                        <h6 className="d-flex mt-1">
+                          <p>1Ex: </p>
+                          <p className="mb-0 ml-3">{this.state.priceChaos}</p>
                         </h6>
                       </div>
                     </div>
@@ -581,16 +649,17 @@ class Buy extends Component {
 
                 <Button variant="success" type="submit" className="mt-3">
                   Submit
-                  {/* {this.state.loadingFlag === true ? (
-                  <Spinner animation="border" />
-                ) : (
-                  ""
-                )} */}
+                  {this.state.loadingFlag === true ? (
+                    <Spinner animation="border" />
+                  ) : (
+                    ""
+                  )}
                 </Button>
               </form>
             </div>
           )}
         </div>
+        <ToastContainer />
       </div>
     );
   }
