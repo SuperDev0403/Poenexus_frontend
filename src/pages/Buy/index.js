@@ -300,10 +300,13 @@ class Buy extends Component {
               autoClose: 3000,
             });
           } else {
-            toast.success("Transaction is saved successfully", {
-              position: toast.POSITION.TOP_RIGHT,
-              autoClose: 3000,
-            });
+            toast.success(
+              "Your Request has been submitted. Seller has been contacted.",
+              {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: false,
+              }
+            );
           }
         })
         .catch((err) => {
