@@ -1,0 +1,28 @@
+.noti_div {
+    svg {
+        font-size: 35px;
+        margin-left: 20%;
+    }
+
+    svg:hover {
+        cursor: pointer;
+    }
+
+    span.count {
+        background: red;
+        color: white;
+        font-size: 16px;
+        border-radius: 50%;
+        top: -15px;
+        position: relative;
+        left: -10px;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    div.noti_unit {
+        border: 2px solid gray;
+        border-radius: 10px;
+        width: fit-content;
+    }
+}

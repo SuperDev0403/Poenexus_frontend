@@ -3,6 +3,9 @@ import Header from "../../components/Header";
 import MenuBar from "../../components/MenuBar";
 import PoenexusService from "../../services/PoenexusService";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell, faCoffee } from "@fortawesome/free-solid-svg-icons";
+
 import { Button, InputGroup, FormControl, Spinner } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,6 +22,7 @@ class Dashboard extends Component {
       ign1: "",
       ign2: "",
       ign3: "",
+      sellList: [],
       loadingFlag: false,
       showForm: false,
     };
@@ -38,6 +42,7 @@ class Dashboard extends Component {
           ign1: res.user.ign1,
           ign2: res.user.ign2,
           ign3: res.user.ign3,
+          sellList: res.sellList,
         });
       })
       .catch((err) => {
@@ -91,6 +96,8 @@ class Dashboard extends Component {
 
   render() {
     const user = JSON.parse(localStorage.getItem("user"));
+    const sellList = this.state.sellList;
+    console.log("sellList: ", sellList);
     return (
       <div>
         <Header />
@@ -321,13 +328,62 @@ class Dashboard extends Component {
                   <p>Trader Rating : {this.state.tradePoint}</p>
                   <p>___</p>
                 </div>
+                <hr className="w-50" />
+                <div className="noti_div">
+                  <div>
+                    <FontAwesomeIcon icon={faBell} />
+                    <span class="count">4</span>
+                  </div>
+                  <div>
+                    <div className="noti_unit p-2 mt-2">
+                      <div className="d-flex">
+                        <h6>OBJ: xxx</h6>
+                        <h6 className="ml-3">Price: yyy</h6>
+                      </div>
+                      <h6>Trade Sec Type: xxx</h6>
+                      <h6>Buyer IGN: xxx</h6>
+                      <h6>Buyer Rating: xxx</h6>
+                      <div className="d-flex">
+                        <button type="button" class="btn btn-success btn-sm">
+                          Accept
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm ml-3"
+                        >
+                          Decline
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-secondary btn-sm ml-3"
+                        >
+                          ????
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div>
               <h2>Active Sell Listings</h2>
               <div className="mt-4">
-                <p>1.</p>
-                <p>1.</p>
+                {sellList.map((list, i) => (
+                  <div className="d-flex mb-2" key={i}>
+                    <div>
+                      <button type="button" class="btn btn-warning btn-sm">
+                        E
+                      </button>
+                      <button type="button" class="btn btn-danger btn-sm ml-3">
+                        C
+                      </button>
+                    </div>
+                    <h5 className="ml-3 mt-1">
+                      {i + 1}. {list.craft.CRAFT} / {list.price_c} /{" "}
+                      {list.price_ex}
+                    </h5>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
