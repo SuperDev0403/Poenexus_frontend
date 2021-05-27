@@ -365,16 +365,17 @@ class Dashboard extends Component {
                 <div>
                   <h2>Active Sell Listings</h2>
                   <div className="mt-4">
-                    {sellList.map((list, i) => (
-                      <div className="d-flex mb-2 sellList_div" key={i}>
-                        <button
-                          type="button"
-                          className="btn btn-warning btn-sm"
-                          onClick={() => this.openEditModal(list)}
-                        >
-                          E
-                        </button>
-                        {list.available ? (
+                    {sellList.map((list, i) =>
+                      list.available ? (
+                        <div className="d-flex mb-2 sellList_div" key={i}>
+                          <button
+                            type="button"
+                            className="btn btn-warning btn-sm"
+                            onClick={() => this.openEditModal(list)}
+                          >
+                            E
+                          </button>
+
                           <button
                             type="button"
                             className="btn btn-danger btn-sm ml-3"
@@ -382,13 +383,13 @@ class Dashboard extends Component {
                           >
                             C
                           </button>
-                        ) : null}
-                        <h5 className="ml-3 mt-1">
-                          {i + 1}. {list.craft.CRAFT} ( {list.price_c} /{" "}
-                          {list.price_ex})
-                        </h5>
-                      </div>
-                    ))}
+                          <h5 className="ml-3 mt-1">
+                            {i + 1}. {list.craft.CRAFT} ( {list.price_c} /{" "}
+                            {list.price_ex})
+                          </h5>
+                        </div>
+                      ) : null
+                    )}
                   </div>
                 </div>
               </div>
@@ -489,17 +490,24 @@ class Dashboard extends Component {
           keyboard={false}
         >
           <Modal.Header>
-            <Modal.Title>Are you sure to cancel this sell object?</Modal.Title>
+            <Modal.Title>Cancel Sell Object</Modal.Title>
           </Modal.Header>
+          <Modal.Body>
+            <h6>
+              If you deactivate your listing you will need to re-post the item
+              for sale for users to see it... Do you wish to deactivate your
+              listing?
+            </h6>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={this.clickCancel}>
-              Cancel
+              Confirm
             </Button>
             <Button
               variant="secondary"
               onClick={() => this.setState({ showCancel: false })}
             >
-              Close
+              Exit
             </Button>
           </Modal.Footer>
         </Modal>
