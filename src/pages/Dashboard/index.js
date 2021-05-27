@@ -6,7 +6,13 @@ import PoenexusService from "../../services/PoenexusService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 
-import { Button, InputGroup, FormControl, Spinner } from "react-bootstrap";
+import {
+  Button,
+  InputGroup,
+  FormControl,
+  Spinner,
+  Modal,
+} from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -97,11 +103,42 @@ class Dashboard extends Component {
       });
   };
 
+  openEditModal = (list) => {
+    console.log("selectedList: ", list);
+    this.setState({ selectedList: list, showEdit: true });
+  };
+
+  openCancelModal = (id) => {
+    this.setState({ cancelId: id, showCancel: true });
+  };
+
+  clickCancel = () => {
+    console.log("cancelId: ", this.state.cancelId);
+    const payload = {
+      id: this.state.cancelId,
+    };
+    PoenexusService.cancelSellObj(payload)
+      .then((res) => {
+        console.log("res: ", res);
+        if (res.status === "success") {
+          toast.success("Cancelled successfully!", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          this.setState({ showCancel: false });
+          setTimeout(() => window.location.reload(false), 3001);
+        }
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
+  };
+
   render() {
     const user = JSON.parse(localStorage.getItem("user"));
     const sellList = this.state.sellList;
     const buyList = this.state.buyList;
-    console.log("buyList: ", buyList);
+    console.log("sellList: ", sellList);
     return (
       <div>
         <Header />
@@ -333,15 +370,19 @@ class Dashboard extends Component {
                         <button
                           type="button"
                           className="btn btn-warning btn-sm"
+                          onClick={() => this.openEditModal(list)}
                         >
                           E
                         </button>
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm ml-3"
-                        >
-                          C
-                        </button>
+                        {list.available ? (
+                          <button
+                            type="button"
+                            className="btn btn-danger btn-sm ml-3"
+                            onClick={() => this.openCancelModal(list.id)}
+                          >
+                            C
+                          </button>
+                        ) : null}
                         <h5 className="ml-3 mt-1">
                           {i + 1}. {list.craft.CRAFT} ( {list.price_c} /{" "}
                           {list.price_ex})
@@ -417,6 +458,51 @@ class Dashboard extends Component {
           </div>
         </div>
         <ToastContainer />
+        <Modal
+          show={this.state.showEdit}
+          onHide={() => this.setState({ showEdit: false })}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header>
+            <Modal.Title>Edit Sell Object</Modal.Title>
+          </Modal.Header>
+          <form>
+            <Modal.Body></Modal.Body>
+            <Modal.Footer>
+              <Button type="submit" variant="primary">
+                Edit
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => this.setState({ showEdit: false })}
+              >
+                Close
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+        <Modal
+          show={this.state.showCancel}
+          onHide={() => this.setState({ showCancel: false })}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header>
+            <Modal.Title>Are you sure to cancel this sell object?</Modal.Title>
+          </Modal.Header>
+          <Modal.Footer>
+            <Button variant="danger" onClick={this.clickCancel}>
+              Cancel
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => this.setState({ showCancel: false })}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
