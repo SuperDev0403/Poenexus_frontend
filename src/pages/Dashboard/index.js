@@ -374,11 +374,19 @@ class Dashboard extends Component {
                           <div className="noti_unit p-2 mt-2">
                             <div className="d-flex">
                               <h6>OBJ: {list.craft.CRAFT}</h6>
-                              <h6 className="ml-3">Price: ${list.converted}</h6>
+                              <h6 className="ml-3">
+                                Price:{" "}
+                                {Number(list.sellInfo.price_c) > 0
+                                  ? Number(list.sellInfo.price_c) + "c"
+                                  : null}{" "}
+                                {Number(list.sellInfo.price_ex) > 0
+                                  ? Number(list.sellInfo.price_ex) + "ex"
+                                  : null}
+                              </h6>
                             </div>
                             <h6>Trade Sec Type: type</h6>
                             <h6>Buyer IGN: {list.buyIgn}</h6>
-                            <h6>Buyer Rating: xxx</h6>
+                            <h6>Buyer Rating: rate</h6>
                             <div className="d-flex">
                               <button
                                 type="button"
