@@ -139,6 +139,13 @@ class Dashboard extends Component {
     const sellList = this.state.sellList;
     const buyList = this.state.buyList;
     console.log("sellList: ", sellList);
+    console.log("buyList: ", buyList);
+    var notiCount = 0;
+    for (let i = 0; i < buyList.length; i++) {
+      if (buyList[i].sellInfo.available) {
+        notiCount++;
+      }
+    }
     return (
       <div>
         <Header />
@@ -368,13 +375,13 @@ class Dashboard extends Component {
                     {sellList.map((list, i) =>
                       list.available ? (
                         <div className="d-flex mb-2 sellList_div" key={i}>
-                          <button
+                          {/* <button
                             type="button"
                             className="btn btn-warning btn-sm"
                             onClick={() => this.openEditModal(list)}
                           >
                             E
-                          </button>
+                          </button> */}
 
                           <button
                             type="button"
@@ -406,51 +413,57 @@ class Dashboard extends Component {
                       icon={faBell}
                       onClick={() => this.setState({ showNoti: true })}
                     />
-                    <span className={this.state.showNoti ? "d-none" : "count"}>
-                      {buyList.length}
-                    </span>
+                    {notiCount === 0 ? null : (
+                      <span
+                        className={this.state.showNoti ? "d-none" : "count"}
+                      >
+                        {notiCount}
+                      </span>
+                    )}
                   </div>
                   <div>
                     {this.state.showNoti
-                      ? buyList.map((list, i) => (
-                          <div className="noti_unit p-2 mt-2">
-                            <div className="d-flex">
-                              <h6>OBJ: {list.craft.CRAFT}</h6>
-                              <h6 className="ml-3">
-                                Price:{" "}
-                                {Number(list.sellInfo.price_c) > 0
-                                  ? Number(list.sellInfo.price_c) + "c"
-                                  : null}{" "}
-                                {Number(list.sellInfo.price_ex) > 0
-                                  ? Number(list.sellInfo.price_ex) + "ex"
-                                  : null}
-                              </h6>
+                      ? buyList.map((list, i) =>
+                          list.sellInfo.available ? (
+                            <div className="noti_unit p-2 mt-2" key={i}>
+                              <div className="d-flex">
+                                <h6>OBJ: {list.craft.CRAFT}</h6>
+                                <h6 className="ml-3">
+                                  Price:{" "}
+                                  {Number(list.sellInfo.price_c) > 0
+                                    ? Number(list.sellInfo.price_c) + "c"
+                                    : null}{" "}
+                                  {Number(list.sellInfo.price_ex) > 0
+                                    ? Number(list.sellInfo.price_ex) + "ex"
+                                    : null}
+                                </h6>
+                              </div>
+                              <h6>Trade Sec Type: type</h6>
+                              <h6>Buyer IGN: {list.buyIgn}</h6>
+                              <h6>Buyer Rating: rate</h6>
+                              <div className="d-flex">
+                                <button
+                                  type="button"
+                                  className="btn btn-success btn-sm"
+                                >
+                                  Accept
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-danger btn-sm ml-auto"
+                                >
+                                  Decline
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-secondary btn-sm ml-auto"
+                                >
+                                  ????
+                                </button>
+                              </div>
                             </div>
-                            <h6>Trade Sec Type: type</h6>
-                            <h6>Buyer IGN: {list.buyIgn}</h6>
-                            <h6>Buyer Rating: rate</h6>
-                            <div className="d-flex">
-                              <button
-                                type="button"
-                                className="btn btn-success btn-sm"
-                              >
-                                Accept
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-danger btn-sm ml-auto"
-                              >
-                                Decline
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-secondary btn-sm ml-auto"
-                              >
-                                ????
-                              </button>
-                            </div>
-                          </div>
-                        ))
+                          ) : null
+                        )
                       : null}
                   </div>
                 </div>
