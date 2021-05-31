@@ -31,7 +31,7 @@ class Sell extends Component {
       security: "",
       collat: 0,
       requireCollat: false,
-      chaos: "",
+      chaos: 0,
       exalted: "",
       objId: null,
       loadingFlag: false,
@@ -261,7 +261,7 @@ class Sell extends Component {
             autoClose: 3000,
           });
         } else {
-          toast.success("Sell data is saved successfully", {
+          toast.success("Your Item has been posted for sale!", {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });

@@ -134,6 +134,38 @@ class Dashboard extends Component {
       });
   };
 
+  clickAccept = (list) => {
+    console.log("list: ", list);
+    const payload = {
+      sellId: list.sellInfo.id,
+      buyerId: list.buyerId,
+      txId: list.id,
+      rating: 10 + list.converted,
+    };
+    PoenexusService.acceptObj(payload)
+      .then((res) => {
+        console.log("res: ", res);
+        if (res.status === "success") {
+          toast.success("Accepted successfully!", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          this.setState({ showCancel: false });
+          setTimeout(() => window.location.reload(false), 3001);
+        } else {
+          toast.error("Accepted Failed!", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          this.setState({ showCancel: false });
+          setTimeout(() => window.location.reload(false), 3001);
+        }
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
+  };
+
   render() {
     const user = JSON.parse(localStorage.getItem("user"));
     const sellList = this.state.sellList;
@@ -445,6 +477,7 @@ class Dashboard extends Component {
                                 <button
                                   type="button"
                                   className="btn btn-success btn-sm"
+                                  onClick={() => this.clickAccept(list)}
                                 >
                                   Accept
                                 </button>

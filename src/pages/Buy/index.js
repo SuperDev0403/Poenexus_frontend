@@ -388,17 +388,24 @@ class Buy extends Component {
 
       count = finalSell.length;
 
-      lowest = convertedArr[0];
+      console.log("FinalSell: ", FinalSell);
+      console.log("convertedArr: ", convertedArr);
 
-      var sum = 0;
-      for (let i = 0; i < convertedArr.length; i++) {
-        if (lowest >= convertedArr[i]) {
-          lowest = convertedArr[i];
+      if (FinalSell.length !== 0) {
+        FinalSell.sort((a, b) => (a.converted > b.converted ? 1 : -1));
+        console.log("sortresult: ", FinalSell);
+
+        lowest = FinalSell[0].price_c + "C " + FinalSell[0].price_ex + "Ex";
+
+        var sum_c = 0;
+        var sum_ex = 0;
+        for (let i = 0; i < FinalSell.length; i++) {
+          sum_c += Number(FinalSell[i].price_c);
+          sum_ex += Number(FinalSell[i].price_ex);
         }
-        sum += convertedArr[i];
-      }
 
-      avgValue = sum / count;
+        avgValue = sum_c / count + "C " + sum_ex / count + "Ex";
+      }
     }
 
     Count = count;
