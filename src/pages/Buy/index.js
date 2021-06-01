@@ -411,11 +411,15 @@ class Buy extends Component {
         }
 
         if (sum_c / count === 0) {
-          avgValue = sum_ex / count + "Ex";
+          avgValue = Number((sum_ex / count).toFixed(3)) + "Ex";
         } else if (sum_ex / count === 0) {
-          avgValue = sum_c / count + "C ";
+          avgValue = Number((sum_c / count).toFixed(3)) + "C ";
         } else {
-          avgValue = sum_c / count + "C " + sum_ex / count + "Ex";
+          avgValue =
+            Number((sum_c / count).toFixed(3)) +
+            "C " +
+            Number((sum_ex / count).toFixed(3)) +
+            "Ex";
         }
       }
     }
