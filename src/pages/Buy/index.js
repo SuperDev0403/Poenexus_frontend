@@ -395,7 +395,13 @@ class Buy extends Component {
         FinalSell.sort((a, b) => (a.converted > b.converted ? 1 : -1));
         console.log("sortresult: ", FinalSell);
 
-        lowest = FinalSell[0].price_c + "C " + FinalSell[0].price_ex + "Ex";
+        if (FinalSell[0].price_c === "0") {
+          lowest = FinalSell[0].price_ex + "Ex";
+        } else if (FinalSell[0].price_ex === "0") {
+          lowest = FinalSell[0].price_c + "C ";
+        } else {
+          lowest = FinalSell[0].price_c + "C " + FinalSell[0].price_ex + "Ex";
+        }
 
         var sum_c = 0;
         var sum_ex = 0;
@@ -404,7 +410,13 @@ class Buy extends Component {
           sum_ex += Number(FinalSell[i].price_ex);
         }
 
-        avgValue = sum_c / count + "C " + sum_ex / count + "Ex";
+        if (sum_c / count === 0) {
+          avgValue = sum_ex / count + "Ex";
+        } else if (sum_ex / count === 0) {
+          avgValue = sum_c / count + "C ";
+        } else {
+          avgValue = sum_c / count + "C " + sum_ex / count + "Ex";
+        }
       }
     }
 
