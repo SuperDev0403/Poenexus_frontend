@@ -32,7 +32,7 @@ class Sell extends Component {
       collat: 0,
       requireCollat: false,
       chaos: 0,
-      exalted: "",
+      exalted: 0,
       objId: null,
       loadingFlag: false,
     };
