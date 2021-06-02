@@ -54,6 +54,14 @@ class Buy extends Component {
     };
     PoenexusService.getBuyData(payload)
       .then((res) => {
+        console.log("res: ", res);
+        var sellObjs = [];
+        for (let i = 0; i < res.sell.length; i++) {
+          if (res.sell[i].userId === payload.userId) {
+            sellObjs.push(res.sell[i].objid);
+          }
+        }
+        console.log("sellObjs: ", sellObjs);
         this.setState({
           bench: res.bench,
           harvest: res.harvest,
@@ -61,6 +69,7 @@ class Buy extends Component {
           sell: res.sell,
           loading: false,
           igns: [res.userinfo.ign1, res.userinfo.ign2, res.userinfo.ign3],
+          sellObjs,
         });
       })
       .catch((err) => {
@@ -134,13 +143,15 @@ class Buy extends Component {
           },
         ];
         for (let i = 0; i < serviceData.length; i++) {
-          products.push({
-            uid: serviceData[i].UID,
-            craft: serviceData[i].CRAFT,
-            craft2: serviceData[i].CRAFT2,
-            cost: serviceData[i].COST,
-            unit: serviceData[i].UNIT,
-          });
+          if (!this.state.sellObjs.includes(serviceData[i].UID)) {
+            products.push({
+              uid: serviceData[i].UID,
+              craft: serviceData[i].CRAFT,
+              craft2: serviceData[i].CRAFT2,
+              cost: serviceData[i].COST,
+              unit: serviceData[i].UNIT,
+            });
+          }
         }
         this.setState({ columns, products, selectedService: e.target.value });
         break;
@@ -183,15 +194,17 @@ class Buy extends Component {
           },
         ];
         for (let i = 0; i < serviceData.length; i++) {
-          products.push({
-            uid: serviceData[i].UID,
-            craft: serviceData[i].CRAFT,
-            tag1: serviceData[i].TAG1,
-            tag2: serviceData[i].TAG2,
-            tag3: serviceData[i].TAG3,
-            tag4: serviceData[i].TAG4,
-            tag5: serviceData[i].TAG5,
-          });
+          if (!this.state.sellObjs.includes(serviceData[i].UID)) {
+            products.push({
+              uid: serviceData[i].UID,
+              craft: serviceData[i].CRAFT,
+              tag1: serviceData[i].TAG1,
+              tag2: serviceData[i].TAG2,
+              tag3: serviceData[i].TAG3,
+              tag4: serviceData[i].TAG4,
+              tag5: serviceData[i].TAG5,
+            });
+          }
         }
         this.setState({ columns, products, selectedService: e.target.value });
         break;
@@ -229,14 +242,16 @@ class Buy extends Component {
           },
         ];
         for (let i = 0; i < serviceData.length; i++) {
-          products.push({
-            uid: serviceData[i].UID,
-            name: serviceData[i].NAME,
-            location: serviceData[i].LOCATION,
-            rank: serviceData[i].RANK,
-            tier: serviceData[i].TIER,
-            craft: serviceData[i].CRAFT,
-          });
+          if (!this.state.sellObjs.includes(serviceData[i].UID)) {
+            products.push({
+              uid: serviceData[i].UID,
+              name: serviceData[i].NAME,
+              location: serviceData[i].LOCATION,
+              rank: serviceData[i].RANK,
+              tier: serviceData[i].TIER,
+              craft: serviceData[i].CRAFT,
+            });
+          }
         }
         this.setState({ columns, products, selectedService: e.target.value });
         break;
