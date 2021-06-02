@@ -289,7 +289,7 @@ class Buy extends Component {
       console.log("FinalSell: ", FinalSell);
 
       if (this.state.sellObjs.includes(this.state.selectdObjUid)) {
-        toast.error("No available to buy own sell object", {
+        toast.error("You are not allowed to purchase your own listings.", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         });
