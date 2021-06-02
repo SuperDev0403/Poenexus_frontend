@@ -143,15 +143,13 @@ class Buy extends Component {
           },
         ];
         for (let i = 0; i < serviceData.length; i++) {
-          if (!this.state.sellObjs.includes(serviceData[i].UID)) {
-            products.push({
-              uid: serviceData[i].UID,
-              craft: serviceData[i].CRAFT,
-              craft2: serviceData[i].CRAFT2,
-              cost: serviceData[i].COST,
-              unit: serviceData[i].UNIT,
-            });
-          }
+          products.push({
+            uid: serviceData[i].UID,
+            craft: serviceData[i].CRAFT,
+            craft2: serviceData[i].CRAFT2,
+            cost: serviceData[i].COST,
+            unit: serviceData[i].UNIT,
+          });
         }
         this.setState({ columns, products, selectedService: e.target.value });
         break;
@@ -194,17 +192,15 @@ class Buy extends Component {
           },
         ];
         for (let i = 0; i < serviceData.length; i++) {
-          if (!this.state.sellObjs.includes(serviceData[i].UID)) {
-            products.push({
-              uid: serviceData[i].UID,
-              craft: serviceData[i].CRAFT,
-              tag1: serviceData[i].TAG1,
-              tag2: serviceData[i].TAG2,
-              tag3: serviceData[i].TAG3,
-              tag4: serviceData[i].TAG4,
-              tag5: serviceData[i].TAG5,
-            });
-          }
+          products.push({
+            uid: serviceData[i].UID,
+            craft: serviceData[i].CRAFT,
+            tag1: serviceData[i].TAG1,
+            tag2: serviceData[i].TAG2,
+            tag3: serviceData[i].TAG3,
+            tag4: serviceData[i].TAG4,
+            tag5: serviceData[i].TAG5,
+          });
         }
         this.setState({ columns, products, selectedService: e.target.value });
         break;
@@ -242,16 +238,14 @@ class Buy extends Component {
           },
         ];
         for (let i = 0; i < serviceData.length; i++) {
-          if (!this.state.sellObjs.includes(serviceData[i].UID)) {
-            products.push({
-              uid: serviceData[i].UID,
-              name: serviceData[i].NAME,
-              location: serviceData[i].LOCATION,
-              rank: serviceData[i].RANK,
-              tier: serviceData[i].TIER,
-              craft: serviceData[i].CRAFT,
-            });
-          }
+          products.push({
+            uid: serviceData[i].UID,
+            name: serviceData[i].NAME,
+            location: serviceData[i].LOCATION,
+            rank: serviceData[i].RANK,
+            tier: serviceData[i].TIER,
+            craft: serviceData[i].CRAFT,
+          });
         }
         this.setState({ columns, products, selectedService: e.target.value });
         break;
@@ -294,39 +288,46 @@ class Buy extends Component {
 
       console.log("FinalSell: ", FinalSell);
 
-      const payload = {
-        sellObjId: FinalSell[0].id,
-        sellUid: this.state.selectdObjUid,
-        sellerId: FinalSell[0].userId,
-        sellIgn: FinalSell[0].ign,
-        buyerId: JSON.parse(localStorage.getItem("user")).id,
-        buyIgn: this.state.ign,
-        converted: FinalSell[0].converted,
-      };
-
-      console.log("payload: ", payload);
-      PoenexusService.saveTransaction(payload)
-        .then((res) => {
-          this.setState({ loadingFlag: false });
-          console.log("res: ", res);
-          if (res.status === 500) {
-            toast.error("Error", {
-              position: toast.POSITION.TOP_RIGHT,
-              autoClose: 3000,
-            });
-          } else {
-            toast.success(
-              "Your Request has been submitted. Seller has been contacted.",
-              {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: false,
-              }
-            );
-          }
-        })
-        .catch((err) => {
-          console.log("Error:", err);
+      if (this.state.sellObjs.includes(this.state.selectdObjUid)) {
+        toast.error("No available to buy own sell object", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
         });
+      } else {
+        const payload = {
+          sellObjId: FinalSell[0].id,
+          sellUid: this.state.selectdObjUid,
+          sellerId: FinalSell[0].userId,
+          sellIgn: FinalSell[0].ign,
+          buyerId: JSON.parse(localStorage.getItem("user")).id,
+          buyIgn: this.state.ign,
+          converted: FinalSell[0].converted,
+        };
+
+        console.log("payload: ", payload);
+        PoenexusService.saveTransaction(payload)
+          .then((res) => {
+            this.setState({ loadingFlag: false });
+            console.log("res: ", res);
+            if (res.status === 500) {
+              toast.error("Error", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+              });
+            } else {
+              toast.success(
+                "Your Request has been submitted. Seller has been contacted.",
+                {
+                  position: toast.POSITION.TOP_RIGHT,
+                  autoClose: false,
+                }
+              );
+            }
+          })
+          .catch((err) => {
+            console.log("Error:", err);
+          });
+      }
     }
   };
 
