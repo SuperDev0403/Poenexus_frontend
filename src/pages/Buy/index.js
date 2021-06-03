@@ -293,6 +293,7 @@ class Buy extends Component {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         });
+        this.setState({ loadingFlag: false });
       } else {
         const payload = {
           sellObjId: FinalSell[0].id,
