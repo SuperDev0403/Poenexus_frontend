@@ -573,7 +573,7 @@ class Buy extends Component {
                         />
 
                         <label htmlFor="Collateral">
-                          Collateral CAP:
+                          MAX Collateral:
                           <input
                             type="number"
                             name="collat"

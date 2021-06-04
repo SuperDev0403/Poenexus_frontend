@@ -43,10 +43,16 @@ class Dashboard extends Component {
     };
     PoenexusService.getUserInfo(payload)
       .then((res) => {
+        console.log("res: ", res);
+        var tradePoint = 0;
+        for (let i = 0; i < res.rating.length; i++) {
+          tradePoint += res.rating[i].rating;
+        }
+        console.log("tradePoint: ", tradePoint);
         this.setState({
           irlName: res.user.irlName,
           discordId: res.user.discordId,
-          tradePoint: res.user.tradePoint,
+          tradePoint,
           ign1: res.user.ign1,
           ign2: res.user.ign2,
           ign3: res.user.ign3,
