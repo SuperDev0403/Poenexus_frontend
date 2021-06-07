@@ -184,6 +184,16 @@ class Dashboard extends Component {
         notiCount++;
       }
     }
+
+    const renderPrice = (priceC, priceEx) => {
+      if (priceC === "0") {
+        return priceEx + "ex";
+      } else if (priceEx === "0") {
+        return priceC + "c";
+      } else {
+        return priceC + "c / " + priceEx + "ex";
+      }
+    };
     return (
       <div>
         <Header />
@@ -429,8 +439,8 @@ class Dashboard extends Component {
                             C
                           </button>
                           <h5 className="ml-3 mt-1">
-                            {i + 1}. {list.craft.CRAFT} ( {list.price_c} /{" "}
-                            {list.price_ex})
+                            {i + 1}. {list.craft.CRAFT} ({" "}
+                            {renderPrice(list.price_c, list.price_ex)})
                           </h5>
                         </div>
                       ) : null
