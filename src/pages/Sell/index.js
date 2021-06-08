@@ -234,6 +234,18 @@ class Sell extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  blurPriceC = (e) => {
+    if (e.target.value === "") {
+      this.setState({ chaos: 0 });
+    }
+  };
+
+  blurPriceEx = (e) => {
+    if (e.target.value === "") {
+      this.setState({ exalted: 0 });
+    }
+  };
+
   handleSubmit = (event) => {
     event.preventDefault();
 
@@ -285,6 +297,8 @@ class Sell extends Component {
     };
 
     const igns = this.state.igns;
+
+    console.log("aaaaaaaaaaaa: ", this.state.chaos);
 
     return (
       <div>
@@ -510,6 +524,7 @@ class Sell extends Component {
                         name="chaos"
                         value={this.state.chaos}
                         onChange={this.changeHandle}
+                        onBlur={this.blurPriceC}
                         required
                       />
                       <label htmlFor="chaos">Chaos</label>
@@ -520,6 +535,7 @@ class Sell extends Component {
                         name="exalted"
                         value={this.state.exalted}
                         onChange={this.changeHandle}
+                        onBlur={this.blurPriceEx}
                         required
                       />
                       <label htmlFor="exalted">Exalted</label>

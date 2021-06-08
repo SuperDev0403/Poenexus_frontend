@@ -194,6 +194,14 @@ class Dashboard extends Component {
         return priceC + "c / " + priceEx + "ex";
       }
     };
+
+    const renderBuyerRating = (param) => {
+      var sum = 0;
+      for (let i = 0; i < param.length; i++) {
+        sum += param[i].rating;
+      }
+      return sum;
+    };
     return (
       <div>
         <Header />
@@ -486,9 +494,12 @@ class Dashboard extends Component {
                                     : null}
                                 </h6>
                               </div>
-                              <h6>Trade Sec Type: type</h6>
+                              <h6>Trade Sec Type: {list.sellInfo.security}</h6>
                               <h6>Buyer IGN: {list.buyIgn}</h6>
-                              <h6>Buyer Rating: rate</h6>
+                              <h6>
+                                Buyer Rating:{" "}
+                                {renderBuyerRating(list.buyerRating)}
+                              </h6>
                               <div className="d-flex">
                                 <button
                                   type="button"
