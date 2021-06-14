@@ -204,7 +204,7 @@ class Dashboard extends Component {
     };
     return (
       <div>
-        <Header />
+        {/* <Header />
         <MenuBar />
         <div className="container">
           <div className="mt-4 mb-5">
@@ -378,16 +378,6 @@ class Dashboard extends Component {
                         </p>
                       </div>
                     </div>
-                    {/* <div className="form-group row">
-                      <label className="mt-2 col-md-4">Trade Point:</label>
-                      <div className="col-md-6">
-                        <p className="mb-0 mt-2">
-                          {this.state.tradePoint === null
-                            ? "N/A"
-                            : this.state.tradePoint}
-                        </p>
-                      </div>
-                    </div> */}
                     <h2 className="mt-4">IGNs</h2>
                     <div className="form-group row mb-3">
                       <label className="mt-2 col-md-4">IGN 1:</label>
@@ -431,14 +421,6 @@ class Dashboard extends Component {
                     {sellList.map((list, i) =>
                       list.available ? (
                         <div className="d-flex mb-2 sellList_div" key={i}>
-                          {/* <button
-                            type="button"
-                            className="btn btn-warning btn-sm"
-                            onClick={() => this.openEditModal(list)}
-                          >
-                            E
-                          </button> */}
-
                           <button
                             type="button"
                             className="btn btn-danger btn-sm ml-3"
@@ -583,7 +565,14 @@ class Dashboard extends Component {
               Exit
             </Button>
           </Modal.Footer>
-        </Modal>
+        </Modal> */}
+        <h1>
+          My old discord is closed, so I created new discord and send you
+          request
+        </h1>
+        <h1>New discord Username is ezio</h1>
+        <h1>and my email is viclory0101@gmail.com</h1>
+        <h1>Waiting your reply</h1>
       </div>
     );
   }

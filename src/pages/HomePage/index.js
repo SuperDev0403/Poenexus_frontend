@@ -18,7 +18,7 @@ class HomePage extends Component {
     return (
       <div>
         <Header />
-        <div className="container">
+        {/* <div className="container">
           <div className="mt-4 mb-5">
             <div id="bodyDIV" className="flex">
               <div id="bodyText">
@@ -40,7 +40,14 @@ class HomePage extends Component {
             </div>
           </div>
           <Register />
-        </div>
+        </div> */}
+        <h1>
+          My old discord is closed, so I created new discord and send you
+          request
+        </h1>
+        <h1>New discord Username is ezio</h1>
+        <h1>and my email is viclory0101@gmail.com</h1>
+        <h1>Waiting your reply</h1>
       </div>
     );
   }
